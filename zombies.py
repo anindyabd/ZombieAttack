@@ -33,6 +33,8 @@ def latent_period(y, t, Alpha, Beta, Delta, Pi, Roh, Zeta):
     Zprime = Roh*I + Zeta*R - Alpha*S*Z 
     Rprime = Delta*S + Delta*I + Alpha*S*Z - Zeta*R 
 
+    return [Sprime, Iprime, Zprime, Rprime]
+
 def treatment(y, t, Alpha, Beta, c, Delta, Pi, Roh, Zeta):
     """
     Model with treatment.
@@ -47,3 +49,35 @@ def treatment(y, t, Alpha, Beta, c, Delta, Pi, Roh, Zeta):
     Iprime = Beta*S*Z - Roh*I - Delta*I
     Zprime = Roh*I + Zeta*R - Alpha*S*Z - c*Z 
     Rprime = Delta*S + Delta*I + Alpha*S*Z - Zeta*R
+
+    return [Sprime, Iprime, Zprime, Rprime]    
+
+def run_basic():
+    init = [500, 0, 0]
+    times = linspace(0, 20, 100)
+
+    solution = odeint(basic_zombies, init, times, args=(0.005,0.0028,0.0001,0,5))
+    plt.plot(times, solution[:,0])
+    plt.plot(times, solution[:,1])
+    plt.show() 
+
+def run_latent_period():
+    init = [500, 0, 0, 0]
+    times = linspace(0,20,100)
+    solution = odeint(latent_period, init, times, args=(0.005,0.0028,0.0001,0,5,5))
+    plt.plot(times, solution[:,0])
+    plt.plot(times, solution[:,2])
+    plt.show() 
+
+def run_treatment():
+    init = [500, 0, 0, 0]
+    times = linspace(0,20,100)
+    solution = odeint(treatment, init, times, args=(0.005,0.0028,0.05,0.0001,0,5,5))
+    plt.plot(times, solution[:,0])
+    plt.plot(times, solution[:,2])
+    plt.show()     
+
+if __name__ == '__main__':
+    #run_basic() 
+    #run_latent_period()
+    run_treatment()
